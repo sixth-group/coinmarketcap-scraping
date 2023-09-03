@@ -18,19 +18,20 @@ class CoinMarketCap:
 
         for scroll_height in range(0, page_height, 50):
             self.driver.execute_script(f'window.scrollTo(0, {scroll_height});')
-            time.sleep(0.2)
+            time.sleep(0.1)
 
         _coins = self.driver.find_elements(by=By.XPATH, value='//table/tbody/tr')
         coins = []
         for coin in _coins:
             cols = coin.find_elements(by=By.XPATH, value='.//td')
+            main_link = cols[1].find_element(by=By.XPATH, value='.//a').get_attribute('href')
             coins.append(
                 {
                     'Rank': cols[0].text,
                     'Name': cols[1].text,
                     'Symbol': cols[2].text,
-                    'MainLink': f'https://coinmarketcap.com/currencies/{slugify(cols[1].text)}/',
-                    'HistoricalLink': f'https://coinmarketcap.com/currencies/{slugify(cols[1].text)}/historical-data/',
+                    'MainLink': main_link,
+                    'HistoricalLink': f'{main_link}historical-data/',
                 }
             )
         return coins
