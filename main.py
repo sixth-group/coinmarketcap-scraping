@@ -11,7 +11,7 @@ class CoinMarketCap:
     def __init__(self):
         self.driver = webdriver.Firefox()
 
-    def get_tops(self, url):
+    def get_tops(self, url='https://coinmarketcap.com/historical/'):
         self.driver.get(url)
         self.driver.implicitly_wait(5)
         page_height = self.driver.execute_script('return document.body.scrollHeight')
@@ -34,6 +34,16 @@ class CoinMarketCap:
                 }
             )
         return coins
+
+    def get_history_of_coins(self, coins: list[dict]):
+        for coin in coins:
+            historical_page_url = coin['HistoricalLink']
+            self.driver.get(historical_page_url)
+            self.driver.implicitly_wait(5)
+
+            self.driver.find_element(by=By.XPATH,
+                                     value="//div[@data-role='btn-content']//*[name()='svg']"
+                                           "/*[name()='use' and @href='#calendar']").click()
 
     @staticmethod
     def export_to_csv(filename: str, data: list, keys: list):
