@@ -1,8 +1,6 @@
 import csv
 import time
 
-from slugify import slugify
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -41,10 +39,16 @@ class CoinMarketCap:
             historical_page_url = coin['HistoricalLink']
             self.driver.get(historical_page_url)
             self.driver.implicitly_wait(5)
+            self.driver.execute_script('window.scrollTo(0, 0);')
 
             self.driver.find_element(by=By.XPATH,
                                      value="//div[@data-role='btn-content']//*[name()='svg']"
-                                           "/*[name()='use' and @href='#calendar']").click()
+                                           "/*[name()='use' and @href='#calendar']/parent::*/parent::*").click()
+            self.driver.find_element(by=By.XPATH, value="//li[text()='Last 365 days']").click()
+            self.driver.find_element(by=By.XPATH, value="//button[text()='Continue']").click()
+            self.driver.find_element(by=By.XPATH, value="//div[contains(text(), 'Download CSV')]").click()
+
+            time.sleep(1)
 
     @staticmethod
     def export_to_csv(filename: str, data: list, keys: list):
