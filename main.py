@@ -11,7 +11,7 @@ class CoinMarketCap:
     def __init__(self):
         self.driver = webdriver.Firefox()
 
-    def get_tops(self, url='https://coinmarketcap.com/historical/'):
+    def get_tops(self, url='https://coinmarketcap.com/historical/20230825/'):
         self.driver.get(url)
         self.driver.implicitly_wait(5)
         page_height = self.driver.execute_script('return document.body.scrollHeight')
