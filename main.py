@@ -8,12 +8,11 @@ from selenium.webdriver.common.by import By
 
 
 class CoinMarketCap:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self):
         self.driver = webdriver.Firefox()
 
-    def get_tops(self):
-        self.driver.get(self.url)
+    def get_tops(self, url):
+        self.driver.get(url)
         self.driver.implicitly_wait(5)
         page_height = self.driver.execute_script('return document.body.scrollHeight')
 
@@ -42,6 +41,9 @@ class CoinMarketCap:
             csv_writer = csv.DictWriter(file, fieldnames=keys)
             csv_writer.writeheader()
             csv_writer.writerows(data)
+
+    def get_driver(self):
+        return self.driver
 
     def close(self):
         self.driver.close()
